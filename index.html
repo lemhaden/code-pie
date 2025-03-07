@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Electronics Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --background-light: #f9f9f9;
+            --background-dark: #181818;
+            --text-light: #444;
+            --text-dark: #ddd;
+            --primary-light: #6200ea;
+            --primary-dark: #bb86fc;
+            --secondary-light: #ffffff;
+            --secondary-dark: #2e2e2e;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        header {
+            background-color: var(--primary-light);
+            color: white;
+            padding: 1.5em;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode header {
+            background-color: var(--primary-dark);
+        }
+
+        main {
+            padding: 2em;
+            width: 90%;
+            max-width: 900px;
+        }
+
+        section {
+            margin-bottom: 2.5em;
+            background: var(--secondary-light);
+            padding: 2em;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        body.dark-mode section {
+            background: var(--secondary-dark);
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        }
+
+        section:hover {
+            transform: translateY(-8px);
+        }
+
+        h2 {
+            color: var(--primary-light);
+            margin-bottom: 1em;
+        }
+
+        body.dark-mode h2 {
+            color: var(--primary-dark);
+        }
+
+        input, select, button {
+            margin-right: 1em;
+            padding: 0.7em;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: var(--primary-light);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        body.dark-mode button {
+            background-color: var(--primary-dark);
+        }
+
+        button:hover {
+            background-color: #3700b3;
+            transform: scale(1.05);
+        }
+
+        body.dark-mode button:hover {
+            background-color: #a371f7;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 1em;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        body.dark-mode th, body.dark-mode td {
+            border-color: #555;
+        }
+
+        .incorrect {
+            border-color: red;
+            animation: shake 0.5s;
+        }
+
+        .correct {
+            border-color: green;
+        }
+
+        .feedback {
+            margin-top: 1em;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            color: green;
+        }
+
+        .feedback.incorrect {
+            color: red;
+        }
+
+        #dark-mode-toggle {
+            position: absolute;
+            top: 1.5em;
+            right: 1.5em;
+            background-color: var(--primary-light);
+            color: white;
+            border: none;
+            padding: 0.7em;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode #dark-mode-toggle {
+            background-color: var(--primary-dark);
+        }
+
+        #dark-mode-toggle:hover {
+            background-color: #3700b3;
+        }
+
+        body.dark-mode #dark-mode-toggle:hover {
+            background-color: #a371f7;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>OFPPT - ISMER TARFAYA GE105</h1>
+        <button id="dark-mode-toggle" onclick="toggleDarkMode()">
+            <i class="fas fa-moon"></i> Dark Mode
+        </button>
+    </header>
+    <main>
+        <section id="number-converter">
+            <h2>Number System Converter</h2>
+            <input type="text" id="number-input" placeholder="Enter number">
+            <select id="from-base">
+                <option value="2">Binary</option>
+                <option value="10">Decimal</option>
+                <option value="8">Octal</option>
+                <option value="16">Hexadecimal</option>
+            </select>
+            <select id="to-base">
+                <option value="2">Binary</option>
+                <option value="10">Decimal</option>
+                <option value="8">Octal</option>
+                <option value="16">Hexadecimal</option>
+            </select>
+            <button onclick="convertNumber()">Convert</button>
+            <p id="conversion-result" class="feedback"></p>
+        </section>
+
+        <section id="conversion-practice">
+            <h2>Conversion Practice</h2>
+            <p id="conversion-question"></p>
+            <input type="text" id="conversion-answer" placeholder="Your answer">
+            <button onclick="checkConversionAnswer()">Submit</button>
+            <p id="conversion-feedback" class="feedback"></p>
+        </section>
+
+        <section id="logic-gate-practice">
+            <h2>Logic Gate Practice</h2>
+            <p id="logic-gate-question"></p>
+            <select id="logic-gate-answer">
+                <option value="0">0</option>
+                <option value="1">1</option>
+            </select>
+            <button onclick="checkLogicGateAnswer()">Submit</button>
+            <p id="logic-gate-feedback" class="feedback"></p>
+        </section>
+
+        <section id="truth-table-practice">
+            <h2>Truth Table Practice</h2>
+            <p id="truth-table-question"></p>
+            <table id="truth-table">
+                <thead>
+                    <tr>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically generated -->
+                </tbody>
+            </table>
+            <button onclick="checkTruthTableAnswers()">Submit</button>
+            <p id="truth-table-feedback" class="feedback"></p>
+        </section>
+    </main>
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const toggleButton = document.getElementById('dark-mode-toggle');
+            const icon = toggleButton.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                toggleButton.innerText = ' Light Mode';
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                toggleButton.innerText = ' Dark Mode';
+            }
+        }
+
+        function convertNumber() {
+            const number = document.getElementById('number-input').value;
+            const fromBase = document.getElementById('from-base').value;
+            const toBase = document.getElementById('to-base').value;
+            const result = parseInt(number, fromBase).toString(toBase);
+            const feedback = document.getElementById('conversion-result');
+            feedback.innerText = `Result: ${result}`;
+            feedback.className = 'feedback correct';
+        }
+
+        function generateConversionQuestion() {
+            const bases = [2, 8, 10, 16];
+            const fromBase = bases[Math.floor(Math.random() * bases.length)];
+            const toBase = bases[Math.floor(Math.random() * bases.length)];
+            const number = Math.floor(Math.random() * 256).toString(fromBase);
+            const question = document.getElementById('conversion-question');
+            question.innerText = `Convert ${number} from base ${fromBase} to base ${toBase}`;
+            question.dataset.fromBase = fromBase;
+            question.dataset.toBase = toBase;
+            question.dataset.number = number;
+        }
+
+        function checkConversionAnswer() {
+            const question = document.getElementById('conversion-question');
+            const fromBase = question.dataset.fromBase;
+            const toBase = question.dataset.toBase;
+            const number = question.dataset.number;
+            const userAnswer = document.getElementById('conversion-answer').value;
+            const correctAnswer = parseInt(number, fromBase).toString(toBase);
+            const feedback = document.getElementById('conversion-feedback');
+
+            if (userAnswer === correctAnswer) {
+                feedback.innerText = 'Correct!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.innerText = `Incorrect. The correct answer is ${correctAnswer}`;
+                feedback.className = 'feedback incorrect';
+            }
+            generateConversionQuestion();
+        }
+
+        function generateLogicGateQuestion() {
+            const gates = ['AND', 'OR', 'XOR', 'NAND', 'NOR', 'XNOR'];
+            const gate = gates[Math.floor(Math.random() * gates.length)];
+            const inputA = Math.round(Math.random());
+            const inputB = Math.round(Math.random());
+            const question = document.getElementById('logic-gate-question');
+            question.innerText = `What is the output of ${gate} gate with inputs A=${inputA} and B=${inputB}?`;
+            question.dataset.gate = gate;
+            question.dataset.inputA = inputA;
+            question.dataset.inputB = inputB;
+        }
+
+        function checkLogicGateAnswer() {
+            const question = document.getElementById('logic-gate-question');
+            const gate = question.dataset.gate;
+            const inputA = parseInt(question.dataset.inputA);
+            const inputB = parseInt(question.dataset.inputB);
+            const userAnswer = document.getElementById('logic-gate-answer').value;
+            let correctAnswer;
+
+            switch (gate) {
+                case 'AND':
+                    correctAnswer = inputA & inputB;
+                    break;
+                case 'OR':
+                    correctAnswer = inputA | inputB;
+                    break;
+                case 'XOR':
+                    correctAnswer = inputA ^ inputB;
+                    break;
+                case 'NAND':
+                    correctAnswer = !(inputA & inputB);
+                    break;
+                case 'NOR':
+                    correctAnswer = !(inputA | inputB);
+                    break;
+                case 'XNOR':
+                    correctAnswer = !(inputA ^ inputB);
+                    break;
+            }
+
+            const feedback = document.getElementById('logic-gate-feedback');
+            if (parseInt(userAnswer) === correctAnswer) {
+                feedback.innerText = 'Correct!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.innerText = `Incorrect. The correct answer is ${correctAnswer}`;
+                feedback.className = 'feedback incorrect';
+            }
+            generateLogicGateQuestion();
+        }
+
+        function generateTruthTableQuestion() {
+            const gates = ['AND', 'OR', 'XOR', 'NAND', 'NOR', 'XNOR'];
+            const gate = gates[Math.floor(Math.random() * gates.length)];
+            const tableBody = document.getElementById('truth-table').querySelector('tbody');
+            tableBody.innerHTML = '';
+
+            for (let a = 0; a <= 1; a++) {
+                for (let b = 0; b <= 1; b++) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${a}</td><td>${b}</td><td><input type="text" data-a="${a}" data-b="${b}"></td>`;
+                    tableBody.appendChild(row);
+                }
+            }
+
+            const question = document.getElementById('truth-table-question');
+            question.innerText = `Complete the truth table for the ${gate} gate:`;
+            question.dataset.gate = gate;
+        }
+
+        function checkTruthTableAnswers() {
+            const gate = document.getElementById('truth-table-question').dataset.gate;
+            const rows = document.getElementById('truth-table').querySelectorAll('tbody tr');
+            let allCorrect = true;
+
+            rows.forEach(row => {
+                const inputA = parseInt(row.querySelector('td:first-child').innerText);
+                const inputB = parseInt(row.querySelector('td:nth-child(2)').innerText);
+                const userAnswer = parseInt(row.querySelector('input').value);
+                let correctAnswer;
+
+                switch (gate) {
+                    case 'AND':
+                        correctAnswer = inputA & inputB;
+                        break;
+                    case 'OR':
+                        correctAnswer = inputA | inputB;
+                        break;
+                    case 'XOR':
+                        correctAnswer = inputA ^ inputB;
+                        break;
+                    case 'NAND':
+                        correctAnswer = !(inputA & inputB);
+                        break;
+                    case 'NOR':
+                        correctAnswer = !(inputA | inputB);
+                        break;
+                    case 'XNOR':
+                        correctAnswer = !(inputA ^ inputB);
+                        break;
+                }
+
+                if (userAnswer !== correctAnswer) {
+                    allCorrect = false;
+                    row.querySelector('input').className = 'incorrect';
+                } else {
+                    row.querySelector('input').className = 'correct';
+                }
+            });
+
+            const feedback = document.getElementById('truth-table-feedback');
+            if (allCorrect) {
+                feedback.innerText = 'All correct!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.innerText = 'Some answers are incorrect. Try again.';
+                feedback.className = 'feedback incorrect';
+            }
+            generateTruthTableQuestion();
+        }
+
+        // Initialize questions
+        generateConversionQuestion();
+        generateLogicGateQuestion();
+        generateTruthTableQuestion();
+    </script>
+</body>
+</html>
